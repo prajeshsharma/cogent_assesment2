@@ -32,7 +32,7 @@ public class Main {
                 employeeDao.sortEmployee();
             }
         } while (choice != 7);
-
+        System.out.println("Goodbye!!!");
 
 
     }
