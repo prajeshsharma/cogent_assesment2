@@ -18,22 +18,13 @@ public class Main {
             System.out.println("7: exit");
             choice = sc.nextInt();
             sc.nextLine();
-            if (choice == 1) { // create employee
-                employeeDao.createEmployee();
-            } else if (choice == 2) { // update employee
-                employeeDao.updateEmployee();
-            } else if (choice == 3) { // delete employee
-                employeeDao.deleteEmployee();
-            } else if (choice == 4) { // print all employees
-                employeeDao.readEmployees();
-            } else if (choice == 5) {
-                employeeDao.searchEmployee();
-            } else if (choice == 6) {
-                employeeDao.sortEmployee();
-            }
+            if (choice == 1) employeeDao.createEmployee(); // create employee
+            else if (choice == 2) employeeDao.updateEmployee(); // update employee
+            else if (choice == 3) employeeDao.deleteEmployee();// delete employee
+            else if (choice == 4) employeeDao.readEmployees(); // print all employees
+            else if (choice == 5) employeeDao.searchEmployee(); // search employee by ID
+            else if (choice == 6) employeeDao.sortEmployee(); // sort employees by name
         } while (choice != 7);
         System.out.println("Goodbye!!!");
-
-
     }
 }
