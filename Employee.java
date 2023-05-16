@@ -1,12 +1,13 @@
 public class Employee {
-    private final int number;
+    private static int counter = 1;
+    private final int id;
     private String name;
     private String address;
     private String email;
     private Double salary;
 
-    public Employee(int number, String name, String address, String email, Double salary) {
-        this.number = number;
+    public Employee(String name, String address, String email, Double salary) {
+        this.id = ++counter;
         this.name = name;
         this.address = address;
         this.email = email;
@@ -14,8 +15,8 @@ public class Employee {
     }
 
 
-    public int getNumber() {
-        return number;
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -41,11 +42,10 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee{" +
-                "number=" + number +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                ", salary=$" + salary +
-                '}';
+                "number=" + id +
+                ", name='" + name +
+                "', address='" + address +
+                "', email='" + email +
+                "', salary=$" + salary + '}';
     }
 }

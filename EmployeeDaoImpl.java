@@ -1,8 +1,10 @@
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EmployeeDaoImpl implements EmployeeDao {
     Scanner sc = new Scanner(System.in);
-    List<Employee> employees = new ArrayList<>();
+    Map<Integer, Employee> employees = new LinkedHashMap<>();
 
     @Override
     public void createEmployee() {
@@ -12,10 +14,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
         String address = sc.nextLine();
         System.out.println("Enter employee email");
         String email = sc.nextLine();
+        while (isInvalidEmail(email)) {
+            System.out.println("Enter valid email");
+            email = sc.nextLine();
+        }
         System.out.println("Enter employee salary");
         Double salary = sc.nextDouble();
         sc.nextLine();
-        employees.add(new Employee(employees.size(), name, address, email, salary));
+        Employee e = new Employee(name, address, email, salary);
+        employees.put(e.getId(), e);
     }
 
     @Override
@@ -23,20 +30,22 @@ public class EmployeeDaoImpl implements EmployeeDao {
         System.out.println("Enter ID of employee");
         int id = sc.nextInt();
         sc.nextLine();
-        for (Employee employee : employees)
-            if (employee.getNumber() == id) {
-                System.out.println("Enter new name");
-                employee.setName(sc.nextLine());
-                System.out.println("Enter new address");
-                employee.setAddress(sc.nextLine());
-                System.out.println("Enter new email");
-                employee.setEmail(sc.nextLine());
-                System.out.println("Enter new salary");
-                employee.setSalary(sc.nextDouble());
-                sc.nextLine();
-                return;
+        if (employees.containsKey(id)) {
+            System.out.println("Enter new name");
+            employees.get(id).setName(sc.nextLine());
+            System.out.println("Enter new address");
+            employees.get(id).setAddress(sc.nextLine());
+            System.out.println("Enter new email");
+            String email = sc.nextLine();
+            while (isInvalidEmail(email)) {
+                System.out.println("Enter valid email");
+                email = sc.nextLine();
             }
-        System.out.println("ID not found");
+            employees.get(id).setEmail(email);
+            System.out.println("Enter new salary");
+            employees.get(id).setSalary(sc.nextDouble());
+            sc.nextLine();
+        } else System.out.println("ID not found");
     }
 
     @Override
@@ -44,18 +53,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
         System.out.println("Enter employee ID");
         int id = sc.nextInt();
         sc.nextLine();
-        for (Employee employee : employees)
-            if (employee.getNumber() == id) {
-                employees.remove(employee);
-                return;
-            }
-        System.out.println("ID not found");
+        if (employees.containsKey(id)) employees.remove(id);
+        else System.out.println("ID not found");
     }
 
     @Override
     public void readEmployees() {
-        for (Employee employee : employees)
-            System.out.println(employee.toString());
+        employees.values().forEach(System.out::println);
     }
 
     @Override
@@ -63,25 +67,27 @@ public class EmployeeDaoImpl implements EmployeeDao {
         System.out.println("Enter Employee ID");
         int id = sc.nextInt();
         sc.nextLine();
-        for (Employee employee : employees)
-            if (employee.getNumber() == id) {
-                System.out.println(employee);
-                return;
-            }
-        System.out.println("ID not found");
+        if (employees.containsKey(id)) System.out.println(employees.get(id).toString());
+        else System.out.println("ID not found");
 
     }
 
     @Override
     public void sortEmployee() {
-        employees.sort(new SortByName());
+        List<Map.Entry<Integer, Employee>> entries = new ArrayList<>(employees.entrySet());
+        entries.sort(Comparator.comparing(e -> e.getValue().getName()));
+        for (Map.Entry<Integer, Employee> entry : entries) System.out.println(entry.toString());
+
     }
 
-}
+    public static boolean isInvalidEmail(String email) {
+        // Regular expression pattern for email validation
+        String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 
-class SortByName implements Comparator<Employee> {
-    @Override
-    public int compare(Employee o1, Employee o2) {
-        return o1.getName().compareTo(o2.getName());
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+
+        return !matcher.matches();
     }
+
 }
