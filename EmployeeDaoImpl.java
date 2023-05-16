@@ -8,21 +8,22 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public void createEmployee() {
+        Employee employee = new Employee();
         System.out.println("Enter employee name");
-        String name = sc.nextLine();
+        employee.setName(sc.nextLine());
         System.out.println("Enter employee address");
-        String address = sc.nextLine();
+        employee.setAddress(sc.nextLine());
         System.out.println("Enter employee email");
         String email = sc.nextLine();
         while (isInvalidEmail(email)) {
             System.out.println("Enter valid email");
             email = sc.nextLine();
         }
-        System.out.println("Enter employee salary");
-        Double salary = sc.nextDouble();
+        employee.setEmail(email);
+        System.out.println("Enter Salary");
+        employee.setSalary(sc.nextDouble());
         sc.nextLine();
-        Employee e = new Employee(name, address, email, salary);
-        employees.put(e.getId(), e);
+        employees.put(employee.getId(), employee);
     }
 
     @Override
@@ -67,26 +68,20 @@ public class EmployeeDaoImpl implements EmployeeDao {
         System.out.println("Enter Employee ID");
         int id = sc.nextInt();
         sc.nextLine();
-        if (employees.containsKey(id)) System.out.println(employees.get(id).toString());
-        else System.out.println("ID not found");
+        System.out.println(employees.containsKey(id) ? employees.get(id).toString() : "ID not found");
 
     }
 
     @Override
     public void sortEmployee() {
-        List<Map.Entry<Integer, Employee>> entries = new ArrayList<>(employees.entrySet());
-        entries.sort(Comparator.comparing(e -> e.getValue().getName()));
-        for (Map.Entry<Integer, Employee> entry : entries) System.out.println(entry.toString());
-
+        List<Employee> employeeList = new ArrayList<>(employees.values());
+        Collections.sort(employeeList);
+        for (Employee employee : employeeList) System.out.println(employee);
     }
 
     public static boolean isInvalidEmail(String email) {
-        // Regular expression pattern for email validation
-        String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
         Matcher matcher = pattern.matcher(email);
-
         return !matcher.matches();
     }
 

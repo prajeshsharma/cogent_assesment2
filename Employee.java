@@ -1,4 +1,4 @@
-public class Employee {
+public class Employee implements Comparable<Employee> {
     private static int counter = 1;
     private final int id;
     private String name;
@@ -6,21 +6,12 @@ public class Employee {
     private String email;
     private Double salary;
 
-    public Employee(String name, String address, String email, Double salary) {
+    public Employee() {
         this.id = ++counter;
-        this.name = name;
-        this.address = address;
-        this.email = email;
-        this.salary = Math.round(100 * salary) / 100.0;
     }
-
 
     public int getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
@@ -47,5 +38,10 @@ public class Employee {
                 "', address='" + address +
                 "', email='" + email +
                 "', salary=$" + salary + '}';
+    }
+
+    @Override
+    public int compareTo(Employee other) {
+        return this.name.compareTo(other.name);
     }
 }
